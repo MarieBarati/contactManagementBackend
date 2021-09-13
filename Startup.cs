@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using contactManagementBackend.DataBasaContext;
+using contactManagementBackend.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ namespace contactManagementBackend
         {
 
             services.AddDbContext<DataContext>(option => option.UseSqlite("Data source=contacts.db"));
+            services.AddScoped<IcontactRepository, SqliteRepository>();
 
 
             services.AddControllers();
@@ -37,6 +39,7 @@ namespace contactManagementBackend
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "contactManagementBackend", Version = "v1" });
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

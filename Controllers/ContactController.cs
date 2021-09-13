@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using contactManagementBackend;
 using contactManagementBackend.Dtoes;
 using contactManagementBackend.Models;
 using contactManagementBackend.Repository;
@@ -21,7 +23,8 @@ namespace Name.Controllers
         [HttpGet]
         public async Task<IEnumerable<ContactDto>> GetContactsAsync(int PageNumber, int PageSize)
         {
-            return await repository.GetContactAsync(PageNumber,PageSize);
+            return (await repository.GetContactAsync(PageNumber,PageSize))
+            .Select(c=>c.AsDto());
 
         }
     }
