@@ -60,7 +60,7 @@ namespace contactManagementBackend.Controllers
             catch (DbException e){
                 return StatusCode(500, e);
             }
-            return StatusCode(200, "Success");
+            return NoContent();
            
         }
 
@@ -87,7 +87,7 @@ namespace contactManagementBackend.Controllers
                 return StatusCode(500, e);
             }
 
-            return StatusCode(200, "Sucess");
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
