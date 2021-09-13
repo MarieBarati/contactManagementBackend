@@ -9,6 +9,7 @@ using contactManagementBackend.Models;
 using contactManagementBackend.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using ContactManagement;
 
 namespace Name.Controllers
 {
@@ -28,20 +29,9 @@ namespace Name.Controllers
         public async Task<ContactListDto> GetContactsAsync(int PageNumber=1, int PageSize=50)
         {
             var contactList = (await repository.GetContactAsync(PageNumber,PageSize))
-            .Select(c=> new ContactDto{
-                Id = c.Id, 
-                FirstName = c.FirstName,
-                LastName = c.LastName,
-                Email = c.Email,
-                MobilePhoneNumber = c.MobilePhoneNumber,
-                BusinessPhoneNumber = c.BusinessPhoneNumber,
-                HomePhoneNumber = c.HomePhoneNumber
-            });
+            .Select(contact => contact.AsDto());
         
-            return  new ContactListDto{
-                ContactList = contactList,
-                TotalNumber = (await repository.TotalRecordsAsync())
-            };
+            return  contactList.AsContactListReponse(await repository.TotalRecordsAsync());
 
             
         }
