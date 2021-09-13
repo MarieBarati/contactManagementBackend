@@ -15,19 +15,22 @@ namespace contactManagementBackend.Repository
         {
             this.context = context;
         }
-        public Task CreateContactAsync(Contact contact)
+        public async  Task CreateContactAsync(Contact contact)
         {
-            throw new NotImplementedException();
+            context.Contacts.Add(contact);
+            await context.SaveChangesAsync();
         }
 
-        public Task DeleteContactAsync(Guid id)
+        public async Task DeleteContactAsync(Guid id)
         {
-            throw new NotImplementedException();
+           var existingContact = await context.Contacts.FindAsync(id);
+            context.Remove(existingContact);
+            await context.SaveChangesAsync();
         }
 
-        public Task<Contact> GetContactAsync(Guid Id)
+        public async Task<Contact> GetContactAsync(Guid Id)
         {
-            throw new NotImplementedException();
+           return await context.Contacts.FindAsync(Id);
         }
 
         public async Task<IEnumerable<Contact>> GetContactAsync(int PageNumber, int PageSize)
@@ -39,19 +42,27 @@ namespace contactManagementBackend.Repository
             .ToListAsync();
         }
 
-        public Task<IEnumerable<Contact>> SearchContactsAsync(string firstname, string lastname, int PageNumber, int PageSize)
+        public async Task<IEnumerable<Contact>> SearchContactsAsync(string firstname, string lastname, int PageNumber, int PageSize)
         {
-            throw new NotImplementedException();
+             return await context.Contacts
+            .Where(Contact=> Contact.FirstName.ToLower().StartsWith(firstname.ToLower()) && Contact.LastName.ToLower().StartsWith(lastname.ToLower()))
+            .Skip((PageNumber -1) * PageSize)
+            .Take(PageSize)
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<Contact>> SearchContactsAsync(string query, int PageNumber, int PageSize)
+        public async Task<IEnumerable<Contact>> SearchContactsAsync(string query, int PageNumber, int PageSize)
         {
-            throw new NotImplementedException();
+            return await context.Contacts
+            .Where(Contact=> Contact.FirstName.ToLower().StartsWith(query.ToLower()) || Contact.LastName.ToLower().StartsWith(query.ToLower()))
+            .Skip((PageNumber -1) * PageSize)
+            .Take(PageSize)
+            .ToListAsync();
         }
 
-        public Task<int> TotalRecordsAsync()
+        public async Task<int> TotalRecordsAsync()
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(context.Contacts.Count());
         }
 
         public Task UpdateContactAsync(Contact contact)
