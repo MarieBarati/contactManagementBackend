@@ -27,6 +27,7 @@ namespace contactManagementBackend
         {
 
             services.AddControllers();
+            services.AddCors();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "contactManagementBackend", Version = "v1" });
@@ -44,6 +45,7 @@ namespace contactManagementBackend
             }
 
             app.UseRouting();
+            app.UseCors(m=>m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthorization();
 
