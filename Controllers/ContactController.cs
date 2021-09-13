@@ -1,6 +1,4 @@
-using System.Diagnostics.Contracts;
-using System.Collections;
-using System.Collections.Generic;
+
 using System.Linq;
 using System.Threading.Tasks;
 using contactManagementBackend;
@@ -9,9 +7,8 @@ using contactManagementBackend.Models;
 using contactManagementBackend.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using ContactManagement;
 
-namespace Name.Controllers
+namespace contactManagementBackend.Controllers
 {
 
     
@@ -35,6 +32,16 @@ namespace Name.Controllers
 
             
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ContactDto>> GetContactAsync(Guid id){
+            var contact = await repository.GetContactAsync(id);
+
+            if (contact is null){
+                return NotFound();
+            }
+            return contact.AsDto();
+        }
          [HttpPost]
         public async Task<ActionResult> CreateContactAsync(CreateDto contactdto){
             Contact newContact = new(){
@@ -51,6 +58,7 @@ namespace Name.Controllers
            
         }
 
+        
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateContactAsync(Guid id, UpdateContactDto updateDto){
             var existingContact = await repository.GetContactAsync(id);
@@ -69,6 +77,8 @@ namespace Name.Controllers
 
             return NoContent();
         }
+
+      
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteContact(Guid id){

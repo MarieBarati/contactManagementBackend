@@ -12,6 +12,10 @@ namespace contactManagementBackend.Repository
 
         Task<IEnumerable<Contact>> SearchContactsAsync(string firstname, string lastname, int PageNumber, int PageSize);
         Task<IEnumerable<Contact>> SearchContactsAsync(string query, int PageNumber, int PageSize);
+
+         Task<IEnumerable<Contact>> SearchContactsByFirstNameAsync(string firstname, int PageNumber, int PageSize);
+
+          Task<IEnumerable<Contact>> SearchContactsByLastNameAsync(string lastname, int PageNumber, int PageSize);
     
         Task CreateContactAsync(Contact contact);
 

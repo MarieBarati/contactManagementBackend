@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-
 using contactManagementBackend.Dtoes;
 using contactManagementBackend.Models;
 
-namespace ContactManagement
+namespace contactManagementBackend
 {
     public static class Extensions
     {

@@ -60,14 +60,39 @@ namespace contactManagementBackend.Repository
             .ToListAsync();
         }
 
+         
+        public async  Task<IEnumerable<Contact>> SearchContactsByFirstNameAsync(string firstname, int PageNumber, int PageSize){
+            return await context.Contacts
+            .Where(Contact=> Contact.FirstName.ToLower().StartsWith(firstname.ToLower()) )
+            .Skip((PageNumber -1) * PageSize)
+            .Take(PageSize)
+            .ToListAsync();
+
+        }
+
+        public async Task<IEnumerable<Contact>> SearchContactsByLastNameAsync(string lastname, int PageNumber, int PageSize){
+             return await context.Contacts
+            .Where(Contact=> Contact.LastName.ToLower().StartsWith(lastname.ToLower()) )
+            .Skip((PageNumber -1) * PageSize)
+            .Take(PageSize)
+            .ToListAsync();
+        }
+
         public async Task<int> TotalRecordsAsync()
         {
             return await Task.FromResult(context.Contacts.Count());
         }
 
-        public Task UpdateContactAsync(Contact contact)
+        public async Task UpdateContactAsync(Contact contact)
         {
-            throw new NotImplementedException();
+            var existingContact = await context.Contacts.FindAsync(contact.Id);
+            var props = typeof(Contact).GetProperties();
+            foreach(var prop in props){
+                var value = prop.GetValue(contact);
+                
+                prop.SetValue(existingContact, value);
+            }
+            await context.SaveChangesAsync();
         }
     }
 }
