@@ -1,4 +1,5 @@
 
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using contactManagementBackend;
@@ -53,14 +54,20 @@ namespace contactManagementBackend.Controllers
                 HomePhoneNumber = contactdto.HomePhoneNumber,
                 BusinessPhoneNumber = contactdto.BusinessPhoneNumber
             };
-            await repository.CreateContactAsync(newContact);
-            return Ok();
+            try{
+                await repository.CreateContactAsync(newContact);
+            }
+            catch (DbException e){
+                return StatusCode(500, e);
+            }
+            return StatusCode(200, "Success");
            
         }
 
-        
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateContactAsync(Guid id, UpdateContactDto updateDto){
+            
             var existingContact = await repository.GetContactAsync(id);
             if(existingContact is null){
                 return NotFound();
@@ -73,12 +80,15 @@ namespace contactManagementBackend.Controllers
                 HomePhoneNumber = updateDto.HomePhoneNumber is null ? existingContact.HomePhoneNumber: updateDto.HomePhoneNumber,
                 BusinessPhoneNumber = updateDto.BusinessPhoneNumber is null ? existingContact.BusinessPhoneNumber: updateDto.BusinessPhoneNumber
             };
-            await repository.UpdateContactAsync(updateContact);
+            try{
+                await repository.UpdateContactAsync(updateContact);
+            }
+            catch (DbException e){
+                return StatusCode(500, e);
+            }
 
-            return NoContent();
+            return StatusCode(200, "Sucess");
         }
-
-      
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteContact(Guid id){
@@ -86,8 +96,12 @@ namespace contactManagementBackend.Controllers
             if (existingContact is null){
                 return NotFound();
             }
-
-            await repository.DeleteContactAsync(id);
+            try{
+                await repository.DeleteContactAsync(id);
+            }
+            catch (DbException e){
+                return StatusCode(500, e);
+            }
             return NoContent();
         }
     }

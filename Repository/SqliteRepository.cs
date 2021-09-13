@@ -18,7 +18,12 @@ namespace contactManagementBackend.Repository
         public async  Task CreateContactAsync(Contact contact)
         {
             context.Contacts.Add(contact);
+            try{
             await context.SaveChangesAsync();
+            }
+            catch{
+                throw;
+            }
         }
 
         public async Task DeleteContactAsync(Guid id)
@@ -92,7 +97,12 @@ namespace contactManagementBackend.Repository
                 
                 prop.SetValue(existingContact, value);
             }
+            try{
             await context.SaveChangesAsync();
+            }
+            catch{
+                throw;
+            }
         }
     }
 }
